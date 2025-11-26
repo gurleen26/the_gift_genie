@@ -2,7 +2,6 @@ import os
 from flask import Flask, render_template, request
 import requests
 import re
-import markdown
 import certifi
 
 app = Flask(__name__)
