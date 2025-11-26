@@ -19,7 +19,7 @@
 - **Backend:** Python, Flask
 - **Frontend:** HTML, CSS, JavaScript
 - **AI Integration:** OpenAI API for generating gift suggestions
-- **Deployment:** Render / Heroku (or specify your deployment platform)
+- **Deployment:** Render 
 - **Additional Libraries:** Requests, Certifi
 
 ---
