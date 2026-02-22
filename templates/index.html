@@ -1,147 +1,712 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎁 The Gift Genie</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GiftGenie AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: 'Quicksand', sans-serif;
-      overflow: hidden;
-    }
-    
-    .carousel {
-      position: absolute;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      z-index: 0;
-    }
+body {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f8e8ff, #e6f0ff);
+  position: relative;
+}
 
-    .carousel-images {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      transition: transform 1s ease-in-out;
-      animation: fadeIn 3s ease-in forwards;
-    }
+/* Animated Background Blobs */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.7;
+  animation: float 10s infinite alternate ease-in-out;
+}
 
-    .carousel-images img {
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
+.blob1 {
+  width: 500px;
+  height: 500px;
+  background: #ffb3e6;
+  top: -100px;
+  left: -150px;
+}
 
-    @keyframes fadeIn {
-      to { opacity: 0.7; }
-    }
+.blob2 {
+  width: 400px;
+  height: 400px;
+  background: #b3d1ff;
+  bottom: -100px;
+  right: -150px;
+  animation-delay: 2s;
+}
 
-    .hero {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      z-index: 1;
-      color: #fff;
-    }
+@keyframes float {
+  from { transform: translateY(0px); }
+  to { transform: translateY(50px); }
+}
 
-    h1 {
-        font-family:serif;
-        font-size: 4rem;
-        color:#4B0082;
-        margin-bottom: 10px;
-    }
+/* Hero Card */
+.hero-card {
+  position: relative;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  padding: 70px 90px;
+  border-radius: 28px;
+  text-align: center;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.15);
+  max-width: 650px;
+  width: 90%;
+  animation: fadeUp 1s ease forwards;
+}
 
-    .subtitle {
-        font-family: sans-serif;
-        font-size: 1.6rem;
-        color: #4B0082;
-        margin-bottom: 35px;
-        font-weight: 500;
-    }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    .start-btn {
-      padding: 14px 36px;
-      font-size: 20px;
-      font-weight: bold;
-      border: none;
-      border-radius: 30px;
-      background: linear-gradient(to right, #ff69b4, #4B0082);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
-    }
+h1 {
+  font-size: 3rem;
+  color: #4B0082;
+  margin-bottom: 15px;
+}
 
-    .start-btn:hover {
-      transform: scale(1.05);
-      background: linear-gradient(to right, #f988c0, #b556f8);
-    }
-  </style>
+p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin-bottom: 40px;
+}
+
+.start-btn {
+  padding: 15px 40px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff2d75, #4B0082);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.start-btn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  font-size: 14px;
+  opacity: 0.6;
+}
+</style>
 </head>
 
 <body>
-<!-- Carousel Section -->
-<div class="carousel">
-  <div class="carousel-images">
-    <img src="{{ url_for('static', filename='images/first.jpg') }}" alt="GiftBox" />
-    <img src="{{ url_for('static', filename='images/family.jpg') }}" alt="Family" />
-    <img src="{{ url_for('static', filename='images/anniversary.jpg') }}" alt="Anniversary" />
-    <img src="{{ url_for('static', filename='images/friends.jpg') }}" alt="Friends" />
-    <img src="{{ url_for('static', filename='images/friends2.jpg') }}" alt="Friends Gifts" />
-  </div>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<div class="hero-card">
+  <h1>🎁 GiftGenie AI</h1>
+  <p>Discover meaningful, personalized gift ideas powered by intelligent AI recommendations.</p>
+
+  <form action="{{ url_for('form') }}" method="get">
+    <button class="start-btn">Start Finding Gifts</button>
+  </form>
 </div>
 
-<!-- Hero Content -->
-<div class="hero">
-  <h1>From Me to You, Curated by AI 🎁</h1>
-  <p class="subtitle">Let AI Unwrap the Perfect Surprise</p>
-  <form action="{{ url_for('form') }}" method="get">
-    <button class="start-btn" type="submit">Start Now</button>
-  </form> 
+<div class="footer">
+  Crafted with AI ✨
+</div>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GiftGenie AI | Smart Gift Discovery</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 20% 30%, #fff5f8 0%, #f0f3ff 50%, #eef0fa 100%);
+  position: relative;
+}
+
+/* Enhanced Animated Background Elements */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.6;
+  animation: float 12s infinite alternate ease-in-out;
+  z-index: 0;
+}
+
+.blob1 {
+  width: 600px;
+  height: 600px;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  top: -200px;
+  left: -200px;
+  animation: float 14s infinite alternate;
+}
+
+.blob2 {
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  bottom: -150px;
+  right: -150px;
+  animation: float 16s infinite alternate-reverse;
+}
+
+.blob3 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float 18s infinite alternate;
+  opacity: 0.4;
+}
+
+/* Floating particles */
+.particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 40px) scale(1.1); }
+}
+
+@keyframes floatReverse {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-40px, -40px) scale(1.1); }
+}
+
+/* Hero Card - Enhanced */
+.hero-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 80px 100px;
+  border-radius: 48px;
+  text-align: center;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset,
+    0 20px 40px rgba(0, 0, 0, 0.05);
+  max-width: 750px;
+  width: 90%;
+  animation: fadeUp 1s ease forwards;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  z-index: -1;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeUp {
+  0% { 
+    opacity: 0; 
+    transform: translateY(40px) scale(0.95);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Icon animation */
+.icon-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 30px;
+  background: linear-gradient(135deg, #ff4d7d, #8b5cf6);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 40px rgba(255, 77, 125, 0.3);
+  animation: bounce 3s infinite ease-in-out;
+  position: relative;
+}
+
+.icon-wrapper::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  background: inherit;
+  opacity: 0.5;
+  filter: blur(20px);
+  z-index: -1;
+  animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+.icon-wrapper i {
+  font-size: 60px;
+  color: white;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+}
+
+h1 {
+  font-size: 3.8rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #ff4d7d, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 5px 15px rgba(255, 77, 125, 0.2);
+  animation: titleGlow 3s infinite alternate;
+}
+
+@keyframes titleGlow {
+  0% { filter: drop-shadow(0 5px 15px rgba(255, 77, 125, 0.2)); }
+  100% { filter: drop-shadow(0 5px 25px rgba(139, 92, 246, 0.4)); }
+}
+
+.highlight {
+  background: linear-gradient(135deg, #ff4d7d, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #4a5568;
+  margin-bottom: 50px;
+  line-height: 1.6;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 400;
+}
+
+/* Feature tags */
+.feature-tags {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(5px);
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+  animation: fadeInTag 0.8s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.tag:nth-child(1) { animation-delay: 0.2s; }
+.tag:nth-child(2) { animation-delay: 0.4s; }
+.tag:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes fadeInTag {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tag:hover {
+  background: white;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.tag i {
+  color: #ff4d7d;
+  font-size: 14px;
+}
+
+.start-btn {
+  padding: 18px 50px;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  border-radius: 60px;
+  background: linear-gradient(135deg, #ff4d7d, #8b5cf6);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 15px 35px rgba(255, 77, 125, 0.3);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  letter-spacing: 0.5px;
+}
+
+.start-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.7s;
+}
+
+.start-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 25px 45px rgba(255, 77, 125, 0.4);
+}
+
+.start-btn:hover::before {
+  left: 100%;
+}
+
+.start-btn i {
+  font-size: 22px;
+  transition: transform 0.3s;
+}
+
+.start-btn:hover i {
+  transform: translateX(8px) rotate(10deg);
+}
+
+.footer {
+  position: absolute;
+  bottom: 30px;
+  font-size: 14px;
+  color: #718096;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 10px 25px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: slideUp 1s ease 0.8s forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer i {
+  color: #ff4d7d;
+  font-size: 14px;
+  animation: heartBeat 1.5s infinite;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .hero-card {
+    padding: 50px 30px;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  .icon-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .icon-wrapper i {
+    font-size: 45px;
+  }
+  
+  .feature-tags {
+    gap: 10px;
+  }
+  
+  .tag {
+    padding: 6px 15px;
+    font-size: 12px;
+  }
+  
+  .start-btn {
+    padding: 15px 35px;
+    font-size: 18px;
+  }
+  
+  .footer {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px;
+  }
+}
+
+/* Loading animation for form submission */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Enhanced animated background -->
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<!-- Floating particles (generated by JavaScript) -->
+<div id="particles"></div>
+
+<div class="hero-card">
+  <div class="icon-wrapper">
+    <i class="fas fa-wand-magic-sparkles"></i>
+  </div>
+  
+  <h1>GiftGenie AI</h1>
+  <p>Discover meaningful, personalized gift ideas powered by <span class="highlight">intelligent AI</span> recommendations that truly understand your loved ones.</p>
+  
+  <!-- Feature tags for visual appeal -->
+  <div class="feature-tags">
+    <div class="tag">
+      <i class="fas fa-brain"></i> AI-Powered
+    </div>
+    <div class="tag">
+      <i class="fas fa-heart"></i> Personalized
+    </div>
+    <div class="tag">
+      <i class="fas fa-gift"></i> Curated Ideas
+    </div>
+  </div>
+
+  <form action="{{ url_for('form') }}" method="get" id="startForm">
+    <button class="start-btn" type="submit" id="startBtn">
+      <span>Start Finding Gifts</span>
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </form>
+</div>
+
+<div class="footer">
+  <span><i class="fas fa-magic"></i> Crafted with AI</span>
+  <span><i class="fas fa-users"></i> 10K+ Happy Gifters</span>
+  <span><i class="fas fa-star"></i> 4.9/5 Rating</span>
 </div>
 
 <script>
-    const images = document.querySelector('.carousel-images');
-    const totalImages = document.querySelectorAll('.carousel-images img').length;
-    images.innerHTML += images.innerHTML;
+// Create floating particles
+function createParticles() {
+  const particlesContainer = document.getElementById('particles');
+  const particleCount = 30;
+  
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    // Random size between 2px and 6px
+    const size = Math.random() * 4 + 2;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    
+    // Random position
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
+    
+    // Random animation
+    const duration = Math.random() * 10 + 10;
+    const delay = Math.random() * 5;
+    particle.style.animation = `float ${duration}s infinite alternate ease-in-out ${delay}s`;
+    
+    // Random opacity
+    particle.style.opacity = Math.random() * 0.3 + 0.2;
+    
+    particlesContainer.appendChild(particle);
+  }
+}
 
-    images.style.width = `${100 * totalImages * 2}vw`;
+// Interactive hover effect on hero card
+const heroCard = document.querySelector('.hero-card');
+heroCard.addEventListener('mousemove', (e) => {
+  const rect = heroCard.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
   
-    let index = 0;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
   
-    function moveToNextImage() {
-      index++;
-      images.style.transition = 'transform 1s ease-in-out';
-      images.style.transform = `translateX(-${index * 100}vw)`;
+  const rotateX = (y - centerY) / 30;
+  const rotateY = (centerX - x) / 30;
   
-      if (index === totalImages) {
-        setTimeout(() => {
-          images.style.transition = 'none';
-          index = 0;
-          images.style.transform = `translateX(0)`;
-        }, 1000);
-      }
-    }
+  heroCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+});
+
+heroCard.addEventListener('mouseleave', () => {
+  heroCard.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+});
+
+// Form submission animation
+const form = document.getElementById('startForm');
+const startBtn = document.getElementById('startBtn');
+
+form.addEventListener('submit', function(e) {
+  // For demo purposes, show loading state
+  e.preventDefault();
   
-    setInterval(moveToNextImage, 4000);
+  const originalHTML = startBtn.innerHTML;
+  startBtn.innerHTML = '<span class="loading"></span> Finding gifts...';
+  startBtn.disabled = true;
+  
+  // Simulate loading (remove in production)
+  setTimeout(() => {
+    // Actually submit the form
+    window.location.href = startBtn.closest('form').action;
+  }, 1500);
+});
+
+// Mouse movement parallax effect on blobs
+document.addEventListener('mousemove', (e) => {
+  const blobs = document.querySelectorAll('.blob');
+  const mouseX = e.clientX / window.innerWidth;
+  const mouseY = e.clientY / window.innerHeight;
+  
+  blobs.forEach((blob, index) => {
+    const speed = (index + 1) * 20;
+    const x = (mouseX - 0.5) * speed;
+    const y = (mouseY - 0.5) * speed;
+    blob.style.transform = `translate(${x}px, ${y}px)`;
+  });
+});
+
+// Initialize particles
+createParticles();
+
+// Add typing effect to subtitle (optional)
+const subtitle = document.querySelector('p');
+const originalText = subtitle.innerHTML;
+subtitle.innerHTML = ''; // Clear for animation
+
+let i = 0;
+function typeWriter() {
+  if (i < originalText.length) {
+    subtitle.innerHTML += originalText.charAt(i);
+    i++;
+    setTimeout(typeWriter, 30);
+  }
+}
+// Uncomment below to enable typing effect on load
+// setTimeout(typeWriter, 1000);
+
+// Animate elements on scroll (just for fun)
+window.addEventListener('load', () => {
+  const tags = document.querySelectorAll('.tag');
+  tags.forEach((tag, index) => {
+    setTimeout(() => {
+      tag.style.opacity = '1';
+      tag.style.transform = 'translateY(0)';
+    }, 200 + index * 100);
+  });
+});
 </script>
+
 </body>
 </html>
