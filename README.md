@@ -1,33 +1,124 @@
-# 🎁 GiftGenieProject
+# 🎁 GiftGenie
 
-**GiftGenie** is an AI-powered web application that helps users find the perfect gift for any occasion. By leveraging advanced AI models and a simple, intuitive interface, GiftGenie generates personalized gift suggestions based on user input, making gifting easier and more thoughtful.
+GiftGenie is an AI-powered gift recommendation web application that helps users discover thoughtful and personalized gift ideas for any occasion. By analyzing user preferences such as occasion, relationship, interests, age group, and budget, the system generates tailored gift suggestions instantly.
 
 ---
 
 ## 🚀 Features
 
-- **AI-Powered Suggestions:** Get smart gift recommendations based on recipient preferences, occasion, and interests.
-- **User-Friendly Interface:** Simple and interactive web interface for seamless user experience.
-- **Multiple Gift Categories:** Covers gifts for birthdays, anniversaries, weddings, holidays, and more.
-- **Instant Results:** Generates suggestions in real-time.
-- **Customizable Options:** Users can refine suggestions by category, budget, or recipient type.
+* 🎯 Personalized gift recommendations based on user inputs
+* 🤖 AI-powered suggestion generation
+* 💰 Budget-based gift filtering
+* 🎉 Supports multiple occasions such as birthdays, anniversaries, weddings, and festivals
+* ⚡ Instant recommendations through an interactive web interface
+* 📱 Simple and user-friendly design
 
 ---
 
 ## 💻 Technologies Used
 
-- **Backend:** Python, Flask
-- **Frontend:** HTML, CSS, JavaScript
-- **AI Integration:** OpenAI API for generating gift suggestions
-- **Deployment:** Render 
-- **Additional Libraries:** Requests, Certifi
+### Frontend
+
+* HTML
+* CSS
+* JavaScript
+
+### Backend
+
+* Python
+* Flask
+
+### AI & APIs
+
+* OpenAI API
+
+### Deployment
+
+* Render
+
+### Libraries
+
+* Requests
+* Certifi
 
 ---
 
 ## 🛠 Installation
 
-1. **Clone the repository:**
+### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/GiftGenieProject.git
-cd GiftGenieProject
+git clone https://github.com/your-username/GiftGenie.git
+cd GiftGenie
+```
+
+### Create a Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### Activate the Environment
+
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+Linux/Mac:
+
+```bash
+source venv/bin/activate
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Configure Environment Variables
+
+Create a `.env` file and add:
+
+```env
+OPENAI_API_KEY=your_api_key_here
+```
+
+### Run the Application
+
+```bash
+python app.py
+```
+
+Open your browser and visit:
+
+```text
+http://localhost:5000
+```
+
+---
+
+## 📌 Use Cases
+
+* Finding gifts for friends and family
+* Birthday and anniversary gift planning
+* Last-minute gift suggestions
+* Personalized gifting based on interests and budget
+
+---
+
+## 🎯 Future Enhancements
+
+* Product links from e-commerce platforms
+* Wishlist and favorites feature
+* User authentication
+* Advanced recommendation engine
+* Multi-language support
+
+---
+
+## 👩‍💻 Author
+
+Gurleen Kaur
