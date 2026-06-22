@@ -1,5 +1,12 @@
 import os
-from flask import Flask, render_template, request
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    session,
+    url_for
+)
 import requests
 import re
 import sqlite3
@@ -11,6 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = "giftgenie_secret"
 
 # Load API key securely from .env
 API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -33,24 +41,104 @@ def init_db():
     created_at = datetime.now().strftime("%d-%m-%Y %H:%M")
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS history(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        description TEXT,
-        age INTEGER,
-        budget INTEGER,
-        currency TEXT,
-        occasion TEXT,
-        relationship TEXT,
-        category TEXT,
-        recommendations TEXT,
-        created_at TEXT
-    )
-    """)
+CREATE TABLE IF NOT EXISTS history(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    description TEXT,
+    age INTEGER,
+    budget INTEGER,
+    currency TEXT,
+    occasion TEXT,
+    relationship TEXT,
+    category TEXT,
+    recommendations TEXT,
+    user_id INTEGER,
+    created_at TEXT
+)
+""")
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE,
+            email TEXT UNIQUE,
+            password TEXT
+        )
+        """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS favorites(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            gift_name TEXT
+        )
+        """)
+    
+    
 
     conn.commit()
     conn.close()
 
-# print("Model being used:", MODEL)
+@app.route("/register", methods=["GET","POST"])
+def register():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        conn = sqlite3.connect("giftgenie.db")
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO users
+            (username,email,password)
+            VALUES(?,?,?)
+            """,
+            (username,email,password)
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/login")
+
+    return render_template("register.html")
+
+@app.route("/login", methods=["GET","POST"])
+def login():
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+        password = request.form["password"]
+
+        conn = sqlite3.connect("giftgenie.db")
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT *
+            FROM users
+            WHERE email=? AND password=?
+            """,
+            (email,password)
+        )
+
+        user = cursor.fetchone()
+
+        conn.close()
+
+        if user:
+
+            session["user_id"] = user[0]
+            session["username"] = user[1]
+
+            return redirect("/form")
+
+    return render_template("login.html")
+
 def get_gift_suggestions(description, age, budget,
                          currency, occasion,
                          relationship, category):
@@ -152,32 +240,35 @@ def save_recommendation(
 
     created_at = datetime.now().strftime("%d-%m-%Y %H:%M")
 
+
     cursor.execute("""
-    INSERT INTO history
-    (
-        description,
-        age,
-        budget,
-        currency,
-        occasion,
-        relationship,
-        category,
-        recommendations,
-        created_at
-    )
-    VALUES (?,?,?,?,?,?,?,?,?)
-    """,
-    (
-        description,
-        age,
-        budget,
-        currency,
-        occasion,
-        relationship,
-        category,
-        recommendations,
-        created_at
-    ))
+        INSERT INTO history
+        (
+            description,
+            age,
+            budget,
+            currency,
+            occasion,
+            relationship,
+            category,
+            recommendations,
+            user_id,
+            created_at
+        )
+        VALUES (?,?,?,?,?,?,?,?,?,?)
+        """,
+        (
+            description,
+            age,
+            budget,
+            currency,
+            occasion,
+            relationship,
+            category,
+            recommendations,
+            session["user_id"],
+            created_at
+        ))
 
     conn.commit()
     conn.close()
@@ -281,8 +372,11 @@ def index():
 
 
 @app.route("/form", methods=["GET", "POST"])
+
 def form():
     suggestions = []
+    if "user_id" not in session:
+        return redirect("/login")
     if request.method == "POST":
         description = request.form.get("description")
         age = request.form.get("age")
@@ -318,7 +412,8 @@ def form():
 
 @app.route("/history")
 def history():
-
+    if "user_id" not in session:
+        return redirect("/login")
     conn = sqlite3.connect("giftgenie.db")
 
     cursor = conn.cursor()
@@ -326,8 +421,10 @@ def history():
     cursor.execute("""
     SELECT *
     FROM history
+    WHERE user_id=?
     ORDER BY id DESC
-    """)
+    """,
+    (session["user_id"],))
 
     data = cursor.fetchall()
 
@@ -337,6 +434,13 @@ def history():
         "history.html",
         history=data
     )
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect("/login")
 
 # if __name__ == "__main__":
 #     app.run(debug=True)
