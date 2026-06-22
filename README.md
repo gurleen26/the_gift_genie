@@ -4,7 +4,7 @@ GiftGenie is an AI-powered gift recommendation web application that helps users 
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
 * 🎯 Personalized gift recommendations based on user inputs
 * 🤖 AI-powered suggestion generation
@@ -15,7 +15,7 @@ GiftGenie is an AI-powered gift recommendation web application that helps users 
 
 ---
 
-## 💻 Technologies Used
+## 🚀 Demo
 
 ### Frontend
 
@@ -43,7 +43,7 @@ GiftGenie is an AI-powered gift recommendation web application that helps users 
 
 ---
 
-## 🛠 Installation
+## 📸 Screenshots
 
 ### Clone the Repository
 

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GiftGenie History</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f8fafc;
+            padding:40px;
+        }
+
+        h1{
+            text-align:center;
+            color:#ff4d7d;
+            margin-bottom:30px;
+        }
+
+        .history-card{
+            background:white;
+            border-radius:20px;
+            padding:25px;
+            margin-bottom:25px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .meta{
+            margin-bottom:15px;
+        }
+
+        .meta span{
+            display:inline-block;
+            margin-right:15px;
+            padding:8px 12px;
+            background:#f1f5f9;
+            border-radius:20px;
+        }
+
+        pre{
+            white-space:pre-wrap;
+            font-family:inherit;
+        }
+
+        .back-btn{
+            display:block;
+            width:200px;
+            margin:30px auto;
+            text-align:center;
+            text-decoration:none;
+            background:#ff4d7d;
+            color:white;
+            padding:12px;
+            border-radius:30px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>📜 Recommendation History</h1>
+
+{% for item in history %}
+
+<div class="history-card">
+
+    <h2>🎁 Search #{{ item[0] }}</h2>
+    <p>
+    🕒 {{ item[9] }}
+</p>
+
+    <div class="meta">
+
+        <span>👤 Age: {{ item[2] }}</span>
+
+        <span>🎉 {{ item[5] }}</span>
+
+        <span>💰 {{ item[3] }} {{ item[4] }}</span>
+
+    </div>
+
+    <p>
+        <strong>Description:</strong>
+        {{ item[1] }}
+    </p>
+
+    <pre>{{ item[8] }}</pre>
+
+</div>
+
+{% endfor %}
+
+<a href="/form" class="back-btn">
+    ← Back to GiftGenie
+</a>
+
+</body>
+</html>
